@@ -42,16 +42,17 @@ module GrapeDoc
       project_dirs.each do |d|
         Dir.chdir(d) do
           puts "Current DIR: #{d}"
-          stdout, stderr, status = Open3.capture3('grep grape_doc Gemfile.lock')
 
-          if opts[:resource_files].all? {|resource| File.file?(resource)} && status.success?
+          if opts[:resource_files].all? {|resource| File.file?(resource)}
             `bundle` if opts[:bundle]
 
             exec_command = 'grape_doc -s'
             exec_command << " --resource-files #{opts[:resource_files].join(' ')}" if opts[:resource_files]
             exec_command << " --root-api #{opts[:root_api]}" if opts[:root_api]
 
-            resource_markdown << `#{exec_command}`
+            stdout, stderr, status = Open3.capture3(exec_command)
+
+            resource_markdown << stdout if status.success?
           end
         end
       end
