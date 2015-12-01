@@ -30,7 +30,7 @@ module GrapeDoc
           :default => false
     end
 
-    FileUtils.mkdir_p(opts[:output_dir]) if !opts[:stdout]
+    FileUtils.mkdir_p(opts[:output_dir]) unless opts[:stdout]
 
     if opts[:batch]
       dirs = Dir.glob('*').select{|f| File.directory?(f)}
