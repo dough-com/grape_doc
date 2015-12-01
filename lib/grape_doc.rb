@@ -8,6 +8,7 @@ require 'grape_doc/doc_writer'
 require 'grape_doc/doc_generator'
 require 'grape_doc/formatters/markdown_formatter'
 require 'trollop'
+require 'open3'
 
 module GrapeDoc
   def self.generate_doc
@@ -41,7 +42,9 @@ module GrapeDoc
       project_dirs.each do |d|
         Dir.chdir(d) do
           puts "Current DIR: #{d}"
-          if opts[:resource_files].all? {|resource| File.file?(resource)}
+          stdout, stderr, status = Open3.capture3('grep grape_doc Gemfile.lock')
+
+          if opts[:resource_files].all? {|resource| File.file?(resource)} && status.success?
             `bundle` if opts[:bundle]
 
             exec_command = 'grape_doc -s'

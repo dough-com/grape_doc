@@ -40,6 +40,8 @@ module GrapeDoc
       doc_formatter = init_formatter
       writer = DOCWriter.new @output_dir, @stdout
 
+      return unless self.resources
+
       self.resources.each do | resource |
         body = doc_formatter.generate_resource_doc(resource)
 

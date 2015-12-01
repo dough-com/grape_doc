@@ -11,8 +11,6 @@ module GrapeDoc
       else
         generate_files body, resource_name
       end
-
-      $stdout.puts "Creating documentation for: #{resource_name}"
     end
 
     def generate_files(body, resource_name)
